@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">ZiMAD Test Case</string>
-    <string name="message_network_error">Network error!</string>
-    <string name="bttn_close">Close</string>
+    <string name="message_network_error">Network error..</string>
 </resources>
