@@ -1,14 +1,18 @@
-package com.ardovic.zimadtestcase;
+package com.ardovic.zimadtestcase.ui.list;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ardovic.zimadtestcase.api.Image;
+import com.ardovic.zimadtestcase.App;
+import com.ardovic.zimadtestcase.R;
+import com.ardovic.zimadtestcase.data.Image;
+import com.ardovic.zimadtestcase.ui.FragmentCommunicator;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -20,11 +24,11 @@ import butterknife.ButterKnife;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private FragmentCommunicator communicator;
+    private ListFragment.Listener listener;
     private List<Image> images;
 
-    ListAdapter(FragmentCommunicator communicator, List<Image> images) {
-        this.communicator = communicator;
+    ListAdapter(ListFragment.Listener listener, List<Image> images) {
+        this.listener = listener;
         this.images = images;
     }
 
@@ -42,10 +46,10 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return images.size();
+        return images == null ? 0 : images.size();
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.imageView)
         ImageView imageView;
@@ -56,7 +60,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -69,7 +73,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .into(imageView, new Callback() {
                         @Override
                         public void onSuccess() {
-
+                            // do nothing
                         }
 
                         @Override
@@ -77,16 +81,15 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             //Try again online if cache failed
                             Picasso.with(App.getInstance().getApplicationContext())
                                     .load(image.getUrl())
-                                    //.error(R.drawable.header)
                                     .into(imageView, new Callback() {
                                         @Override
                                         public void onSuccess() {
-
+                                            // do nothing
                                         }
 
                                         @Override
                                         public void onError() {
-
+                                            // do nothing
                                         }
                                     });
                         }
@@ -95,7 +98,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            communicator.showFullImage(image.getUrl());
+            listener.onImageClicked(image);
         }
     }
 }

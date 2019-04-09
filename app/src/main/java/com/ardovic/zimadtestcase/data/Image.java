@@ -1,14 +1,13 @@
-package com.ardovic.zimadtestcase;
+package com.ardovic.zimadtestcase.data;
 
-public class DTO {
+import com.google.gson.annotations.Expose;
 
+public class Image {
+
+    @Expose
     private String url;
+    @Expose
     private String title;
-
-    public DTO(String url, String title) {
-        this.url = url;
-        this.title = title;
-    }
 
     public String getUrl() {
         return url;

@@ -7,12 +7,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "http://kot3.com";
-    public static Retrofit retrofit = null;
+    private static final String BASE_URL = "http://kot3.com";
+    private static Retrofit retrofit = null;
 
     public static Retrofit getApiClient() {
-        if (retrofit == null) {
-
+        if (retrofit == null)
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(new OkHttpClient.Builder()
@@ -20,8 +19,6 @@ public class ApiClient {
                             .build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-
-        }
         return retrofit;
     }
 }

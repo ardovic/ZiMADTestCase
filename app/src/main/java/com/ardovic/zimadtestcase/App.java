@@ -4,41 +4,35 @@ import android.app.Application;
 
 import com.ardovic.zimadtestcase.api.ApiClient;
 import com.ardovic.zimadtestcase.api.ApiInterface;
-import com.ardovic.zimadtestcase.data.Data;
+import com.ardovic.zimadtestcase.data.Model;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 public class App extends Application {
 
+    private static final String PREFS = "PREFS";
     private static App instance;
-    private ApiInterface apiInterface;
-    private Data data;
+    private Model model;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        data = new Data();
+        instance = this;
+        model = new Model(getApplicationContext().getSharedPreferences(PREFS, MODE_PRIVATE));
 
-        Picasso.Builder builder = new Picasso.Builder(this);
-        builder.downloader(new OkHttp3Downloader(this, Integer.MAX_VALUE));
-        Picasso built = builder.build();
-        built.setIndicatorsEnabled(true);
-        built.setLoggingEnabled(true);
-        Picasso.setSingletonInstance(built);
-
+        Picasso picasso = new Picasso.Builder(this)
+                .downloader(new OkHttp3Downloader(this, Integer.MAX_VALUE))
+                .build();
+        picasso.setLoggingEnabled(true);
+        Picasso.setSingletonInstance(picasso);
     }
 
     public static App getInstance() {
         return instance;
     }
 
-    public ApiInterface getApiInterface() {
-        return apiInterface;
-    }
-
-    public Data getData() {
-        return data;
+    public Model getModel() {
+        return model;
     }
 }
